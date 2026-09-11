@@ -1,0 +1,6 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mihan1</title><link rel="stylesheet" href="/style.css"></head><body>
+<header><b>Mihan<span>1</span></b><button id="loginBtn">ورود مدیر</button></header><main>
+<section class="hero"><i>مرکز اشتراک فایل</i><h1>فایل‌های Mihan1</h1><p>فایل‌های منتشرشده را مشاهده و دانلود کنید.</p></section>
+<section id="admin" class="panel hidden"><div class="row"><h2>پنل مدیریت</h2><button id="logout">خروج</button></div><form id="upload"><input name="name" placeholder="عنوان فایل" required><textarea name="description" placeholder="توضیحات"></textarea><input name="file" type="file" required><button>آپلود و انتشار</button><small id="msg"></small></form></section>
+<section><div class="row"><div><h2>فایل‌ها</h2><p id="count"></p></div><button id="refresh">↻</button></div><div id="list" class="grid"></div></section></main>
+<div id="modal" class="modal hidden"><div class="box"><button id="close">×</button><h2>ورود مدیر</h2><form id="login"><input name="username" value="admin" required><input name="password" type="password" placeholder="رمز عبور" required><button>ورود</button><small id="loginmsg"></small></form></div></div><script src="/app.js"></script></body></html>

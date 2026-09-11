@@ -1,0 +1,10 @@
+const $=s=>document.querySelector(s);let admin=false;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const size=n=>n<1024?n+" B":n<1048576?(n/1024).toFixed(1)+" KB":(n/1048576).toFixed(1)+" MB";
+async function load(){let fs=await (await fetch("/api/files")).json();$("#count").textContent=fs.length+" فایل";$("#list").innerHTML=fs.length?fs.map(f=>`<article class="card"><div>📄</div><h3>${esc(f.name)}</h3><p>${esc(f.description||"بدون توضیحات")}</p><div class="meta"><span>${size(f.size)}</span><span>${new Date(f.createdAt).toLocaleDateString("fa-IR")}</span></div><div class="actions"><a class="download" href="${f.url}">دانلود</a>${admin?`<button class="del" onclick="delFile('${f.id}')">حذف</button>`:""}</div></article>`).join(""):'<div class="empty">هنوز فایلی منتشر نشده است.</div>'}
+async function delFile(id){if(confirm("فایل حذف شود؟")){await fetch("/api/files/"+id,{method:"DELETE"});load()}}window.delFile=delFile;
+$("#loginBtn").onclick=()=>$("#modal").classList.remove("hidden");$("#close").onclick=()=>$("#modal").classList.add("hidden");$("#refresh").onclick=load;
+$("#login").onsubmit=async e=>{e.preventDefault();let r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(e.target)))}),j=await r.json();if(!r.ok)return $("#loginmsg").textContent=j.error;admin=true;$("#modal").classList.add("hidden");$("#admin").classList.remove("hidden");load()};
+$("#logout").onclick=async()=>{await fetch("/api/logout",{method:"POST"});admin=false;$("#admin").classList.add("hidden");load()};
+$("#upload").onsubmit=async e=>{e.preventDefault();$("#msg").textContent="در حال آپلود...";let r=await fetch("/api/upload",{method:"POST",body:new FormData(e.target)}),j=await r.json();$("#msg").textContent=r.ok?"فایل منتشر شد.":j.error;if(r.ok){e.target.reset();load()}};
+(async()=>{let j=await (await fetch("/api/me")).json();if(j.admin){admin=true;$("#admin").classList.remove("hidden")}load()})();
